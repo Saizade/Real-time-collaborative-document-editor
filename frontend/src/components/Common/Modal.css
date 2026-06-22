@@ -1,0 +1,185 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+  animation: fadeIn 0.15s ease;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+  overflow: hidden;
+  animation: fadeSlideUp 0.25s ease;
+}
+
+.modal-head {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-secondary);
+}
+
+.modal-head h3 {
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.modal-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-quaternary);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.modal-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.share-link-row {
+  display: flex;
+  gap: 8px;
+}
+
+.share-link-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  font-size: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-tertiary);
+  font-family: var(--font-body);
+  outline: none;
+}
+
+.share-add-row {
+  display: flex;
+  gap: 8px;
+}
+
+.share-add-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  font-size: 13px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  outline: none;
+}
+
+.share-add-row input:focus {
+  border-color: var(--color-accent);
+}
+
+.share-add-row select {
+  width: 100px;
+  padding: 10px 8px;
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  font-size: 13px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  outline: none;
+  cursor: pointer;
+}
+
+.collab-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.collab-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background 0.1s;
+}
+
+.collab-row:hover {
+  background: var(--bg-secondary);
+}
+
+.collab-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.collab-name {
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--text-primary);
+}
+
+.collab-email {
+  font-size: 11px;
+  color: var(--text-quaternary);
+}
+
+.collab-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.collab-badge {
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bg-secondary);
+  color: var(--text-tertiary);
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: capitalize;
+}
+
+.collab-empty {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-quaternary);
+  font-size: 13px;
+}
+
+.modal-divider {
+  height: 1px;
+  background: var(--border-secondary);
+}
