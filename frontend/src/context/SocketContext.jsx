@@ -11,7 +11,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (user && user.token) {
       // Connect to the backend socket server (port 5001 in development)
-      const socketUrl = window.location.hostname === 'localhost' ? 'http://localhost:5001' : '/';
+      const socketUrl = import.meta.env.VITE_BACKEND_URL ? import.meta.env.VITE_BACKEND_URL.replace(/\/api$/, '') : (window.location.hostname === 'localhost' ? 'http://localhost:5001' : '/');
       const newSocket = io(socketUrl, {
         autoConnect: true,
         transports: ['websocket', 'polling']

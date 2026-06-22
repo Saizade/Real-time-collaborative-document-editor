@@ -6,8 +6,10 @@ export const setAuthToken = (token) => {
   authToken = token;
 };
 
+const API_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001/api';
+
 const api = axios.create({
-  baseURL: '',
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },

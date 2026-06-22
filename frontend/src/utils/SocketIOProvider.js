@@ -36,6 +36,14 @@ export class SocketIOProvider extends Observable {
     });
   }
 
+  init() {
+    const SOCKET_URL = import.meta.env.VITE_BACKEND_URL ? import.meta.env.VITE_BACKEND_URL.replace('/api', '') : 'http://localhost:5001';
+    
+    this.socket = io(SOCKET_URL, {
+      path: '/socket.io/',
+    });
+  }
+
   _handleYjsUpdate(update, origin) {
     // Check if the update originated locally (not from server synchronization)
     if (origin !== this) {
