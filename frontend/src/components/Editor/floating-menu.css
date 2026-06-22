@@ -1,0 +1,39 @@
+.floating-menu {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-secondary);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  padding: 4px;
+  min-width: 160px;
+  overflow: hidden;
+  animation: fadeSlideUp 0.15s ease;
+}
+
+.floating-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.floating-menu button:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.floating-menu button.is-active {
+  background: var(--bg-tertiary);
+  color: var(--color-accent);
+}
