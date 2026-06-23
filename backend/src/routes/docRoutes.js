@@ -10,7 +10,8 @@ const {
   getVersions,
   createVersion,
   rollbackVersion,
-  togglePublicAccess
+  togglePublicAccess,
+  deleteDocument
 } = require('../controllers/docController');
 const { protect, optionalAuth } = require('../middleware/authMiddleware');
 
@@ -24,7 +25,10 @@ router.route('/')
   .post(createDocument)
   .get(getDocuments);
 
-router.put('/:id', updateDocumentTitle);
+router.route('/:id')
+  .put(updateDocumentTitle)
+  .delete(deleteDocument);
+
 router.put('/:id/public', togglePublicAccess);
 
 router.route('/:id/share')

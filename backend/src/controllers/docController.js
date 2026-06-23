@@ -395,6 +395,35 @@ const togglePublicAccess = async (req, res) => {
   }
 };
 
+// @desc    Delete a document
+// @route   DELETE /api/documents/:id
+// @access  Private
+const deleteDocument = async (req, res) => {
+  try {
+    const doc = await Document.findById(req.params.id);
+
+    if (!doc) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+
+    // Only owner can delete
+    if (doc.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Only the document owner can delete this document' });
+    }
+
+    // Delete versions first
+    await Version.deleteMany({ documentId: doc._id });
+
+    // Delete the document
+    await Document.deleteOne({ _id: doc._id });
+
+    res.json({ message: 'Document deleted successfully' });
+  } catch (error) {
+    console.error('Error in deleteDocument:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createDocument,
   getDocuments,
@@ -405,5 +434,6 @@ module.exports = {
   getVersions,
   createVersion,
   rollbackVersion,
-  togglePublicAccess
+  togglePublicAccess,
+  deleteDocument
 };

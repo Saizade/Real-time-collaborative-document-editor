@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import api from '../../utils/api';
-import { FileText, Plus, Search, LogOut, FileCode, Moon, Sun, Folder as FolderIcon, ChevronRight } from 'lucide-react';
+import { FileText, Plus, Search, LogOut, FileCode, Moon, Sun, Folder as FolderIcon, ChevronRight, Trash2 } from 'lucide-react';
 import TemplateModal from '../Common/TemplateModal';
 import './Layout.css';
 
@@ -57,6 +57,18 @@ const Sidebar = ({ activeDocId, onSelectDoc, refreshTrigger }) => {
       await fetchData();
     } catch {
       alert('Failed to create folder');
+    }
+  };
+
+  const handleDeleteDoc = async (e, id) => {
+    e.stopPropagation();
+    if (!window.confirm('Are you sure you want to delete this document? This cannot be undone.')) return;
+    try {
+      await api.delete(`/api/documents/${id}`);
+      if (activeDocId === id) onSelectDoc(null);
+      await fetchData();
+    } catch (err) {
+      alert('Failed to delete document: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -121,6 +133,11 @@ const Sidebar = ({ activeDocId, onSelectDoc, refreshTrigger }) => {
                       <div className="doc-item-info">
                         <div className="doc-item-name" style={{ fontSize: 13 }}>{doc.title}</div>
                       </div>
+                      {doc.owner === user._id || (doc.owner && doc.owner._id === user._id) ? (
+                        <button className="btn-icon" style={{ opacity: 0.6, padding: 4, marginLeft: 'auto' }} onClick={(e) => handleDeleteDoc(e, doc._id)} title="Delete document">
+                          <Trash2 size={14} color="var(--color-danger, #fa5252)" />
+                        </button>
+                      ) : null}
                     </div>
                   ))}
                   {filteredDocs.filter(d => d.folder === folder._id).length === 0 && <div style={{ padding: '6px 8px', fontSize: 12, color: 'var(--text-quaternary)' }}>Empty folder</div>}
@@ -139,6 +156,11 @@ const Sidebar = ({ activeDocId, onSelectDoc, refreshTrigger }) => {
                   {doc.owner._id === user._id ? 'Owned' : `By ${doc.owner.username}`} · {formatDate(doc.updatedAt)}
                 </div>
               </div>
+              {doc.owner._id === user._id && (
+                <button className="btn-icon" style={{ opacity: 0.6, padding: 4, marginLeft: 'auto' }} onClick={(e) => handleDeleteDoc(e, doc._id)} title="Delete document">
+                  <Trash2 size={15} color="var(--color-danger, #fa5252)" />
+                </button>
+              )}
             </div>
           ))}
 
