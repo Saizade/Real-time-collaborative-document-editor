@@ -5,7 +5,7 @@ import html2pdf from 'html2pdf.js';
 import TurndownService from 'turndown';
 import './Layout.css';
 
-const Header = ({ docDetails, provider, onOpenShare, onToggleVersions, onTitleUpdated }) => {
+const Header = ({ isGuest, onLoginClick, docDetails, provider, onOpenShare, onToggleVersions, onTitleUpdated }) => {
   const [title, setTitle] = useState('');
   const [collaborators, setCollaborators] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -138,6 +138,12 @@ const Header = ({ docDetails, provider, onOpenShare, onToggleVersions, onTitleUp
             <div key={i} className="avatar tip" data-tip={c.username} style={{ background: c.color }}>{initials(c.username)}</div>
           ))}
         </div>
+
+        {isGuest && (
+          <button className="primary-btn" onClick={onLoginClick} style={{ marginLeft: 16, padding: '6px 14px', height: 32, fontSize: 13 }}>
+            Sign In
+          </button>
+        )}
 
         <div className="header-btns">
           <button className="btn btn-secondary" onClick={handleExportPDF} title="Export to PDF"><Download size={14} /><span>PDF</span></button>

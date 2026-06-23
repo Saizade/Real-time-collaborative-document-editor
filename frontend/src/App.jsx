@@ -48,6 +48,7 @@ const MainApp = () => {
   const [shareOpen, setShareOpen] = useState(false);
   const [versionsOpen, setVersionsOpen] = useState(false);
   const [pendingTemplate, setPendingTemplate] = useState(null);
+  const [forceLogin, setForceLogin] = useState(false);
 
   useEffect(() => {
     const route = () => {
@@ -88,7 +89,7 @@ const MainApp = () => {
     );
   }
 
-  const isPublicView = !user && activeDocId && docDetails?.isPublic;
+  const isPublicView = !user && activeDocId && docDetails?.isPublic && !forceLogin;
 
   if (!user && !isPublicView) {
     return authView === 'register'
@@ -108,7 +109,7 @@ const MainApp = () => {
       <div className="main">
         {activeDocId && docDetails ? (
           <>
-            <Header docDetails={docDetails} provider={provider} onOpenShare={() => setShareOpen(true)} onToggleVersions={() => setVersionsOpen(!versionsOpen)} onTitleUpdated={() => setRefresh(r => r + 1)} />
+            <Header isGuest={!user} onLoginClick={() => setForceLogin(true)} docDetails={docDetails} provider={provider} onOpenShare={() => setShareOpen(true)} onToggleVersions={() => setVersionsOpen(!versionsOpen)} onTitleUpdated={() => setRefresh(r => r + 1)} />
             <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
               <Editor documentId={activeDocId} socket={socket} user={currentUser} role={docDetails.role} onProviderReady={setProvider} pendingTemplate={pendingTemplate} clearTemplate={() => setPendingTemplate(null)} />
               {versionsOpen && <VersionPanel documentId={activeDocId} role={docDetails.role} onClose={() => setVersionsOpen(false)} onRollbackComplete={() => { fetchDetails(); setRefresh(r => r + 1); }} />}
