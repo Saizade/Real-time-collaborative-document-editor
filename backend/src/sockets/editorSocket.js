@@ -30,24 +30,8 @@ const initSocketServer = (io) => {
 
     socket.on('join-document', async ({ documentId, token }) => {
       try {
-        if (!documentId || !token) {
-          socket.emit('error', { message: 'Missing documentId or token' });
-          return;
-        }
-
-        // 1. Verify token
-        let decoded;
-        try {
-          decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecrettokenkeyforcollaborativedoceditor2026');
-        } catch (err) {
-          socket.emit('error', { message: 'Authentication failed' });
-          return;
-        }
-
-        // 2. Fetch user and check permissions
-        const user = await User.findById(decoded.id);
-        if (!user) {
-          socket.emit('error', { message: 'User not found' });
+        if (!documentId) {
+          socket.emit('error', { message: 'Missing documentId' });
           return;
         }
 
@@ -57,11 +41,42 @@ const initSocketServer = (io) => {
           return;
         }
 
-        const userIdStr = user._id.toString();
-        const isOwner = doc.owner.toString() === userIdStr;
-        const collaborator = doc.collaborators.find(c => c.user.toString() === userIdStr);
+        let user = null;
+        let role = null;
 
-        if (!isOwner && !collaborator) {
+        // 1. Verify token if provided
+        if (token && token !== 'undefined') {
+          try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecrettokenkeyforcollaborativedoceditor2026');
+            user = await User.findById(decoded.id);
+          } catch (err) {
+            // Invalid token, continue as guest
+          }
+        }
+
+        // 2. Check permissions
+        if (user) {
+          const userIdStr = user._id.toString();
+          const isOwner = doc.owner.toString() === userIdStr;
+          const collaborator = doc.collaborators.find(c => c.user.toString() === userIdStr);
+
+          if (isOwner) role = 'owner';
+          else if (collaborator) role = collaborator.role;
+        }
+
+        if (!role && doc.isPublic) {
+          role = doc.publicRole || 'viewer';
+          if (!user) {
+            // Assign a mock guest user identity
+            user = {
+              _id: `guest_${socket.id}`,
+              username: `Anonymous`,
+              color: `#999999`
+            };
+          }
+        }
+
+        if (!role) {
           socket.emit('error', { message: 'Not authorized to view this document' });
           return;
         }
