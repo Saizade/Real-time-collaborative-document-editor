@@ -114,6 +114,20 @@
   letter-spacing: 2px;
 }
 
+/* PDF Export overrides */
+.exporting-pdf .page-break {
+  background: transparent !important;
+  box-shadow: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  page-break-after: always;
+}
+
+.exporting-pdf .page-break::after {
+  display: none !important;
+}
+
 /* ProseMirror */
 .ProseMirror {
   font-family: var(--font-body);

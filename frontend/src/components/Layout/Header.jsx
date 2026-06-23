@@ -78,17 +78,24 @@ const Header = ({ docDetails, provider, onOpenShare, onToggleVersions, onTitleUp
     } catch { alert('Failed to save version.'); }
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     const element = document.querySelector('.ProseMirror');
     if (!element) return;
+
+    element.classList.add('exporting-pdf');
+
     const opt = {
       margin: 1,
       filename: `${title || 'document'}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'], after: '.page-break' }
     };
-    html2pdf().set(opt).from(element).save();
+
+    await html2pdf().set(opt).from(element).save();
+
+    element.classList.remove('exporting-pdf');
   };
 
   const handleExportMD = () => {
