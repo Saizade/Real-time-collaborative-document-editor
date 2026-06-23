@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const COLORS = [
   '#E64980', // Pink
@@ -34,11 +33,8 @@ const UserSchema = new mongoose.Schema(
         'Please add a valid email'
       ]
     },
-    password: {
-      type: String,
-      required: [true, 'Please add a password'],
-      minlength: [6, 'Password must be at least 6 characters'],
-      select: false
+    googleId: {
+      type: String
     },
     color: {
       type: String,
@@ -49,19 +45,5 @@ const UserSchema = new mongoose.Schema(
     timestamps: true
   }
 );
-
-// Hash password before saving
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-});
-
-// Compare entered password with hashed password in database
-UserSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
 
 module.exports = mongoose.model('User', UserSchema);

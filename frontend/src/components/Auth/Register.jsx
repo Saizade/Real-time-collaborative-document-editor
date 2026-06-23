@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { FileText } from 'lucide-react';
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../../utils/firebase';
 import './Auth.css';
 
 const Register = ({ onSwitchToLogin }) => {
@@ -11,6 +9,7 @@ const Register = ({ onSwitchToLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const { register, loginWithGoogle } = useAuth();
   const { theme } = useTheme();
@@ -18,19 +17,24 @@ const Register = ({ onSwitchToLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setMessage('');
     setLoading(true);
     const result = await register(username, email, password);
     if (!result.success) {
       setError(result.message);
       setLoading(false);
+    } else {
+      setMessage(result.message);
+      // Let them read the message before doing anything else
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      const result = await signInWithPopup(auth, googleProvider);
-      const authResult = await loginWithGoogle(result.user);
+      setError('');
+      setMessage('');
+      const authResult = await loginWithGoogle();
       if (!authResult.success) {
         setError(authResult.message);
         setLoading(false);
@@ -53,6 +57,7 @@ const Register = ({ onSwitchToLogin }) => {
         </div>
 
         {error && <div className="auth-error">{error}</div>}
+        {message && <div className="auth-error" style={{ background: 'rgba(56, 193, 114, 0.1)', color: '#38c172', border: '1px solid rgba(56, 193, 114, 0.2)' }}>{message}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-field">

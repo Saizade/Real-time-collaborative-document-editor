@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { FileText } from 'lucide-react';
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../../utils/firebase';
 import './Auth.css';
 
 const Login = ({ onSwitchToRegister }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, forgotPassword } = useAuth();
   const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setMessage('');
     setLoading(true);
     const result = await login(email, password);
     if (!result.success) {
@@ -28,8 +28,9 @@ const Login = ({ onSwitchToRegister }) => {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      const result = await signInWithPopup(auth, googleProvider);
-      const authResult = await loginWithGoogle(result.user);
+      setError('');
+      setMessage('');
+      const authResult = await loginWithGoogle();
       if (!authResult.success) {
         setError(authResult.message);
         setLoading(false);
@@ -38,6 +39,23 @@ const Login = ({ onSwitchToRegister }) => {
       setError(err.message || 'Google login failed');
       setLoading(false);
     }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError('Please enter your email address first');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    setMessage('');
+    const result = await forgotPassword(email);
+    if (result.success) {
+      setMessage(result.message);
+    } else {
+      setError(result.message);
+    }
+    setLoading(false);
   };
 
   return (
@@ -52,6 +70,7 @@ const Login = ({ onSwitchToRegister }) => {
         </div>
 
         {error && <div className="auth-error">{error}</div>}
+        {message && <div className="auth-error" style={{ background: 'rgba(56, 193, 114, 0.1)', color: '#38c172', border: '1px solid rgba(56, 193, 114, 0.2)' }}>{message}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-field">
@@ -59,7 +78,10 @@ const Login = ({ onSwitchToRegister }) => {
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@company.com" required disabled={loading} />
           </div>
           <div className="auth-field">
-            <label>Password</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <label>Password</label>
+              <button type="button" onClick={handleForgotPassword} className="text-button" style={{ fontSize: 13, background: 'none', border: 'none', color: 'var(--color-primary)', cursor: 'pointer', padding: 0 }}>Forgot password?</button>
+            </div>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required disabled={loading} />
           </div>
           <button type="submit" className="auth-submit" disabled={loading}>
