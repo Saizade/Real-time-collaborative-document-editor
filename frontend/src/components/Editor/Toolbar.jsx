@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bold, Italic, Strikethrough, Code, Heading1, Heading2, Heading3, List, ListOrdered, Quote, Terminal, Minus, Undo, Redo } from 'lucide-react';
+import { Bold, Italic, Strikethrough, Code, Heading1, Heading2, Heading3, List, ListOrdered, Quote, Terminal, Minus, Undo, Redo, SplitSquareHorizontal } from 'lucide-react';
 import './Editor.css';
 
 const Toolbar = ({ editor }) => {
@@ -29,6 +29,7 @@ const Toolbar = ({ editor }) => {
       <B onClick={() => editor.chain().focus().toggleCodeBlock().run()} active={editor.isActive('codeBlock')} title="Code Block"><Terminal size={15} /></B>
       <div className="toolbar-sep" />
       <B onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Divider"><Minus size={15} /></B>
+      <B onClick={() => editor.chain().focus().setPageBreak().run()} title="Page Break"><SplitSquareHorizontal size={15} /></B>
     </div>
   );
 };

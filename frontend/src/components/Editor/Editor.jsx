@@ -8,7 +8,8 @@ import TaskItem from '@tiptap/extension-task-item';
 import * as Y from 'yjs';
 import SocketIOProvider from '../../utils/SocketIOProvider';
 import Toolbar from './Toolbar';
-import { Heading1, Heading2, List, Quote, Code, CheckSquare } from 'lucide-react';
+import { Heading1, Heading2, List, Quote, Code, CheckSquare, SplitSquareHorizontal } from 'lucide-react';
+import { PageBreak } from './extensions/PageBreak';
 import './Editor.css';
 import './floating-menu.css';
 
@@ -23,6 +24,7 @@ const TiptapContent = ({ ydoc, provider, role, pendingTemplate, clearTemplate })
         provider,
         user: { name: provider.user.username, color: provider.user.color },
       }),
+      PageBreak,
     ],
     editable: role !== 'viewer',
     content: '',
@@ -55,6 +57,7 @@ const TiptapContent = ({ ydoc, provider, role, pendingTemplate, clearTemplate })
               <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'is-active' : ''}><Quote size={14} /><span>Quote</span></button>
               <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'is-active' : ''}><Code size={14} /><span>Code Block</span></button>
               <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={editor.isActive('taskList') ? 'is-active' : ''}><CheckSquare size={14} /><span>Task List</span></button>
+              <button onClick={() => editor.chain().focus().setPageBreak().run()}><SplitSquareHorizontal size={14} /><span>Page Break</span></button>
             </FloatingMenu>
           )}
           <EditorContent editor={editor} />
