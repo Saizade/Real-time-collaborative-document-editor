@@ -1,5 +1,31 @@
-.floating-menu {
+.floating-menu-wrapper {
   display: flex;
+  align-items: center;
+  position: relative;
+  /* Shift it to the left margin of the editor paper */
+  transform: translateX(-40px);
+}
+
+.floating-menu-trigger {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.floating-menu-trigger:hover,
+.floating-menu-wrapper:hover .floating-menu-trigger {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.floating-menu-options {
+  display: none;
   flex-direction: column;
   background: var(--bg-primary);
   border: 1px solid var(--border-secondary);
@@ -7,11 +33,18 @@
   box-shadow: var(--shadow-lg);
   padding: 4px;
   min-width: 160px;
-  overflow: hidden;
-  animation: fadeSlideUp 0.15s ease;
+  position: absolute;
+  left: 32px; /* Position it to the right of the + icon */
+  top: 0;
+  z-index: 100;
+  animation: fadeSlideRight 0.15s ease;
 }
 
-.floating-menu button {
+.floating-menu-wrapper:hover .floating-menu-options {
+  display: flex;
+}
+
+.floating-menu-options button {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -28,12 +61,23 @@
   transition: all 0.1s ease;
 }
 
-.floating-menu button:hover {
+.floating-menu-options button:hover {
   background: var(--bg-secondary);
   color: var(--text-primary);
 }
 
-.floating-menu button.is-active {
+.floating-menu-options button.is-active {
   background: var(--bg-tertiary);
   color: var(--color-accent);
+}
+
+@keyframes fadeSlideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

@@ -8,7 +8,7 @@ import TaskItem from '@tiptap/extension-task-item';
 import * as Y from 'yjs';
 import SocketIOProvider from '../../utils/SocketIOProvider';
 import Toolbar from './Toolbar';
-import { Heading1, Heading2, List, Quote, Code, CheckSquare, SplitSquareHorizontal } from 'lucide-react';
+import { Heading1, Heading2, List, Quote, Code, CheckSquare, SplitSquareHorizontal, Plus } from 'lucide-react';
 import { PageBreak } from './extensions/PageBreak';
 import './Editor.css';
 import './floating-menu.css';
@@ -50,14 +50,19 @@ const TiptapContent = ({ ydoc, provider, role, pendingTemplate, clearTemplate })
         )}
         <div className="editor-paper">
           {editor && role !== 'viewer' && (
-            <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }} className="floating-menu">
-              <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}><Heading1 size={14} /><span>Heading 1</span></button>
-              <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}><Heading2 size={14} /><span>Heading 2</span></button>
-              <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'is-active' : ''}><List size={14} /><span>Bullet List</span></button>
-              <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'is-active' : ''}><Quote size={14} /><span>Quote</span></button>
-              <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'is-active' : ''}><Code size={14} /><span>Code Block</span></button>
-              <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={editor.isActive('taskList') ? 'is-active' : ''}><CheckSquare size={14} /><span>Task List</span></button>
-              <button onClick={() => editor.chain().focus().setPageBreak().run()}><SplitSquareHorizontal size={14} /><span>Page Break</span></button>
+            <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }} className="floating-menu-wrapper">
+              <div className="floating-menu-trigger">
+                <Plus size={20} />
+              </div>
+              <div className="floating-menu-options">
+                <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}><Heading1 size={14} /><span>Heading 1</span></button>
+                <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}><Heading2 size={14} /><span>Heading 2</span></button>
+                <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'is-active' : ''}><List size={14} /><span>Bullet List</span></button>
+                <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'is-active' : ''}><Quote size={14} /><span>Quote</span></button>
+                <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'is-active' : ''}><Code size={14} /><span>Code Block</span></button>
+                <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={editor.isActive('taskList') ? 'is-active' : ''}><CheckSquare size={14} /><span>Task List</span></button>
+                <button onClick={() => editor.chain().focus().setPageBreak().run()}><SplitSquareHorizontal size={14} /><span>Page Break</span></button>
+              </div>
             </FloatingMenu>
           )}
           <EditorContent editor={editor} />
